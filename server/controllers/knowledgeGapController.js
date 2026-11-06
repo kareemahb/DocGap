@@ -1,0 +1,104 @@
+import KnowledgeGap from "../models/KnowledgeGap.js";
+import { escapeRegex } from "../utils/escapeRegex.js";
+import { ensureDocumentExists } from "../utils/ensureDocumentExists.js";
+
+// Throws a 400 if a gap points to a document that doesn't exist
+const ensureDocumentExists = async (documentId) => {
+  if (!documentId) return;
+  const exists = await Document.exists({ _id: documentId });
+  if (!exists) {
+    const error = new Error("Linked document not found");
+    error.status = 400;
+    throw error;
+  }
+};
+
+// GET /api/gaps?status=open&priority=critical&assignee=rivera&document=<id>
+export const getGaps = async (req, res) => {
+  const { status, priority, assignee, document } = req.query;
+
+  const filter = {};
+  if (status) filter.status = status;
+  else filter.status = { $ne: "archived" };
+  if (priority) filter.priority = priority;
+  if (assignee) filter.assignee = new RegExp(escapeRegex(assignee), "i");
+  if (document) filter.document = document;
+
+  const gaps = await KnowledgeGap.find(filter)
+    .populate("document", "title category owner")
+    .sort({ createdAt: -1 });
+
+  res.json(gaps);
+};
+
+// GET /api/gaps/:id
+export const getGap = async (req, res) => {
+  const gap = await KnowledgeGap.findById(req.params.id).populate("document");
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+  res.json(gap);
+};
+
+// POST /api/gaps
+export const createGap = async (req, res) => {
+  const { resolvedAt, ...data } = req.body ?? {};
+  await ensureDocumentExists(data.document);
+
+  const gap = await KnowledgeGap.create(data);
+  res.status(201).json(gap);
+};
+
+// PUT /api/gaps/:id: uses save() so the resolvedAt hook runs
+export const updateGap = async (req, res) => {
+  const { resolvedAt, ...updates } = req.body ?? {};
+
+  const gap = await KnowledgeGap.findById(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+
+  if (updates.document) await ensureDocumentExists(updates.document);
+
+  gap.set(updates);
+  await gap.save();
+  res.json(gap);
+};
+
+// PATCH /api/gaps/:id/assign   body: { "assignee": "J. Rivera" }
+export const assignGap = async (req, res) => {
+  const { assignee } = req.body ?? {};
+  if (!assignee)
+    return res.status(400).json({ message: "Assignee is required" });
+
+  const gap = await KnowledgeGap.findById(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+
+  gap.assignee = assignee;
+  if (gap.status === "open") gap.status = "in_progress";
+  await gap.save();
+  res.json(gap);
+};
+
+// PATCH /api/gaps/:id/resolve
+export const resolveGap = async (req, res) => {
+  const gap = await KnowledgeGap.findById(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+
+  gap.status = "resolved";
+  await gap.save();
+  res.json(gap);
+};
+
+// PATCH /api/gaps/:id/archive
+export const archiveGap = async (req, res) => {
+  const gap = await KnowledgeGap.findById(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+
+  gap.status = "archived";
+  await gap.save();
+  res.json(gap);
+};
+
+// DELETE /api/gaps/:id
+export const deleteGap = async (req, res) => {
+  const gap = await KnowledgeGap.findByIdAndDelete(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+  res.json({ message: "Knowledge gap deleted", id: gap._id });
+};
