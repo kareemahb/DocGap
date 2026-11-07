@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* DocGap Direction A: "Soft Signal" */
+@theme {
+  --font-sans: "Urbanist", ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand palette */
+  --color-alice: #d8dfe9; /* Alice Blue: page background */
+  --color-honeydew: #cfdeca; /* Honeydew: healthy, success */
+  --color-vanilla: #eff0a3; /* Vanilla: highlight, high severity */
+  --color-ink: #212121; /* Eerie Black: text, critical, primary buttons */
+  --color-ghost: #f6f5fa; /* Ghost White: inner cards */
+
+  /* Supporting tones */
+  --color-muted: #5b5f6b; /* secondary text (passes contrast on white) */
+  --color-line: #eceef3; /* dividers */
+
+  /* Corner radius from the design */
+  --radius-card: 1.75rem; /* 28px: main panels */
+  --radius-tile: 1.375rem; /* 22px: KPI tiles */
+}
+
+@layer base {
+  body {
+    @apply bg-alice font-sans text-ink antialiased;
+  }
+}
