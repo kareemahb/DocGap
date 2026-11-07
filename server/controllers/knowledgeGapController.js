@@ -2,17 +2,6 @@ import KnowledgeGap from "../models/KnowledgeGap.js";
 import { escapeRegex } from "../utils/escapeRegex.js";
 import { ensureDocumentExists } from "../utils/ensureDocumentExists.js";
 
-// Throws a 400 if a gap points to a document that doesn't exist
-const ensureDocumentExists = async (documentId) => {
-  if (!documentId) return;
-  const exists = await Document.exists({ _id: documentId });
-  if (!exists) {
-    const error = new Error("Linked document not found");
-    error.status = 400;
-    throw error;
-  }
-};
-
 // GET /api/gaps?status=open&priority=critical&assignee=rivera&document=<id>
 export const getGaps = async (req, res) => {
   const { status, priority, assignee, document } = req.query;
