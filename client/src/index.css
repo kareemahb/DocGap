@@ -1,27 +1,37 @@
 @import "tailwindcss";
 
-/* DocGap Direction A: "Soft Signal" */
+/* DocGap final palette, sampled from the dashboard design */
 @theme {
   --font-sans: "Urbanist", ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand palette */
-  --color-alice: #d8dfe9; /* Alice Blue: page background */
-  --color-honeydew: #cfdeca; /* Honeydew: healthy, success */
-  --color-vanilla: #eff0a3; /* Vanilla: highlight, high severity */
-  --color-ink: #212121; /* Eerie Black: text, critical, primary buttons */
-  --color-ghost: #f6f5fa; /* Ghost White: inner cards */
+  /* Brand colors */
+  --color-alice: #d6e4f2; /* Alice Blue: landing hero, workspace card border */
+  --color-vanilla: #f3e5ab; /* Vanilla: high severity, "at risk", highlights */
+  --color-honeydew: #cde8d4; /* Honeydew: success, "did the fix work" */
+  --color-ink: #1b1b1b; /* Ink: text, critical, primary buttons */
+  --color-ghost: #f8f8ff; /* Ghost White: page background */
 
-  /* Supporting tones */
+  /* Light tints */
+  --color-sky: #f0f9ff; /* active nav item, chart bars, "needs review" */
+  --color-mint: #ebfff4; /* "healthy" pills */
+
+  /* Knowledge base dots */
+  --color-gold: #d4bf6c;
+  --color-cornflower: #8ab8de;
+  --color-sage: #8bc9a0;
+
+  /* Text and lines */
   --color-muted: #5b5f6b; /* secondary text (passes contrast on white) */
-  --color-line: #eceef3; /* dividers */
+  --color-forest: #34603f; /* positive trend, like "−18%" */
+  --color-line: #ececf0; /* borders and dividers */
 
-  /* Corner radius from the design */
-  --radius-card: 1.75rem; /* 28px: main panels */
-  --radius-tile: 1.375rem; /* 22px: KPI tiles */
+  /* Corner radius */
+  --radius-card: 1.25rem; /* 20px: cards and panels */
+  --radius-tile: 1rem; /* 16px: inner boxes */
 }
 
 @layer base {
   body {
-    @apply bg-alice font-sans text-ink antialiased;
+    @apply bg-ghost font-sans text-ink antialiased;
   }
 }

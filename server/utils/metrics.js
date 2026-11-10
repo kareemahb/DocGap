@@ -1,3 +1,5 @@
+// Shared analytics math: pure functions, no database
+
 export const MIN_DAYS_OBSERVED = 7;
 export const MIN_BASELINE_TICKETS = 5;
 export const WORKED_THRESHOLD = -25;
@@ -13,4 +15,23 @@ export const getVerdict = ({ daysObserved, ticketsBefore, changePercent }) => {
   if (changePercent <= WORKED_THRESHOLD) return "worked";
   if (changePercent < 0) return "partial";
   return "no_improvement";
+};
+
+// The fewest documents whose tickets add up to at least half of all tickets
+export const countDriverDocs = (ticketCountsPerDoc, totalTickets) => {
+  if (totalTickets === 0) return 0;
+  const sorted = [...ticketCountsPerDoc].sort((a, b) => b - a);
+  let covered = 0;
+  for (const [i, count] of sorted.entries()) {
+    covered += count;
+    if (covered * 2 >= totalTickets) return i + 1;
+  }
+  return sorted.length;
+};
+
+// Share of a knowledge base reviewed recently → a status label
+export const getHealthStatus = (percentReviewed) => {
+  if (percentReviewed >= 80) return "healthy";
+  if (percentReviewed >= 50) return "needs_review";
+  return "at_risk";
 };

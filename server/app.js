@@ -6,6 +6,7 @@ import documentRoutes from "./routes/documentRoutes.js";
 import knowledgeGapRoutes from "./routes/knowledgeGapRoutes.js";
 import supportIssueRoutes from "./routes/supportIssueRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
+import knowledgeBaseRoutes from "./routes/knowledgeBaseRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/documents", documentRoutes);
 app.use("/api/gaps", knowledgeGapRoutes);
 app.use("/api/issues", supportIssueRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/knowledge-bases", knowledgeBaseRoutes);
 
 // Error handling: must come AFTER all routes
 app.use(notFound);

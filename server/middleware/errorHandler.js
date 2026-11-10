@@ -19,6 +19,12 @@ export const errorHandler = (err, req, res, next) => {
     message = `Invalid id: ${err.value}`;
   }
 
+  // A `unique` field already has this value, like a knowledge base name
+  if (err.code === 11000) {
+    status = 409;
+    message = `Already exists: ${Object.values(err.keyValue ?? {}).join(", ")}`;
+  }
+
   res.status(status).json({
     message,
     ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),

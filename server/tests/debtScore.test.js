@@ -105,6 +105,29 @@ describe("calculateDebtScore", () => {
     },
   );
 
+  test("Reset your password scores 92 and is critical", () => {
+    const resetPassword = {
+      lastReviewedAt: daysBefore(420),
+      negativeFeedback: 9,
+      missingInfo: true,
+      businessImpact: "critical",
+    };
+
+    const result = calculateDebtScore(resetPassword, 42, NOW);
+
+    expect(result.score).toBe(92);
+    expect(result.severity).toBe("critical");
+  });
+
+  test("a doc that was never reviewed gets full review-age points", () => {
+    const planned = { lastReviewedAt: null, businessImpact: "low" };
+
+    const result = calculateDebtScore(planned, 0, NOW);
+
+    expect(result.breakdown.age).toBe(WEIGHTS.age);
+    expect(result.reasons).toEqual(["No linked doc yet"]);
+  });
+
   test("a brand-new, low-impact doc with no tickets scores 0", () => {
     const result = calculateDebtScore(
       { lastReviewedAt: NOW, businessImpact: "low" },

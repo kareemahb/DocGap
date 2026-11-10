@@ -29,7 +29,7 @@ export const getGap = async (req, res) => {
 
 // POST /api/gaps
 export const createGap = async (req, res) => {
-  const { resolvedAt, ...data } = req.body ?? {};
+  const { resolvedAt, verifiedAt, ...data } = req.body ?? {};
   await ensureDocumentExists(data.document);
 
   const gap = await KnowledgeGap.create(data);
@@ -38,7 +38,7 @@ export const createGap = async (req, res) => {
 
 // PUT /api/gaps/:id: uses save() so the resolvedAt hook runs
 export const updateGap = async (req, res) => {
-  const { resolvedAt, ...updates } = req.body ?? {};
+  const { resolvedAt, verifiedAt, ...updates } = req.body ?? {};
 
   const gap = await KnowledgeGap.findById(req.params.id);
   if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
@@ -90,4 +90,20 @@ export const deleteGap = async (req, res) => {
   const gap = await KnowledgeGap.findByIdAndDelete(req.params.id);
   if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
   res.json({ message: "Knowledge gap deleted", id: gap._id });
+};
+
+// PATCH /api/gaps/:id/verify: someone confirmed the fix worked
+export const verifyGap = async (req, res) => {
+  const gap = await KnowledgeGap.findById(req.params.id);
+  if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
+
+  if (gap.status !== "resolved") {
+    return res
+      .status(400)
+      .json({ message: "Only resolved gaps can be verified" });
+  }
+
+  gap.verifiedAt = new Date();
+  await gap.save();
+  res.json(gap);
 };

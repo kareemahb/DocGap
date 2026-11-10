@@ -1,5 +1,10 @@
 import { describe, test, expect } from "vitest";
-import { percentChange, getVerdict } from "../utils/metrics.js";
+import {
+  percentChange,
+  getVerdict,
+  countDriverDocs,
+  getHealthStatus,
+} from "../utils/metrics.js";
 
 describe("percentChange", () => {
   test.each([
@@ -51,5 +56,38 @@ describe("getVerdict", () => {
     expect(
       getVerdict({ daysObserved: 30, ticketsBefore: 20, changePercent }),
     ).toBe(expected);
+  });
+});
+
+describe("countDriverDocs", () => {
+  test("4 docs drive most of the demo week's 38 tickets", () => {
+    expect(countDriverDocs([2, 7, 3, 5, 6, 4], 38)).toBe(4);
+  });
+
+  test("one doc with every ticket is the only driver", () => {
+    expect(countDriverDocs([10], 10)).toBe(1);
+  });
+
+  test("no tickets means no drivers", () => {
+    expect(countDriverDocs([], 0)).toBe(0);
+  });
+
+  test("when most tickets aren't linked to a doc, every doc counts", () => {
+    expect(countDriverDocs([2, 1], 20)).toBe(2);
+  });
+});
+
+describe("getHealthStatus", () => {
+  test.each([
+    [100, "healthy"],
+    [86, "healthy"],
+    [80, "healthy"],
+    [79, "needs_review"],
+    [59, "needs_review"],
+    [50, "needs_review"],
+    [49, "at_risk"],
+    [32, "at_risk"],
+  ])("%i% reviewed is %s", (percent, expected) => {
+    expect(getHealthStatus(percent)).toBe(expected);
   });
 });

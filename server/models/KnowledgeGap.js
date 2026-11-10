@@ -42,6 +42,10 @@ const knowledgeGapSchema = new mongoose.Schema(
     resolvedAt: {
       type: Date,
     },
+
+    verifiedAt: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
@@ -56,6 +60,7 @@ knowledgeGapSchema.pre("save", async function () {
 
   if (this.status !== "resolved" && this.status !== "archived") {
     this.resolvedAt = undefined;
+    this.verifiedAt = undefined;
   }
 });
 

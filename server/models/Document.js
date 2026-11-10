@@ -7,10 +7,10 @@ const documentSchema = new mongoose.Schema(
       required: [true, "Title is required"],
       trim: true,
     },
-    category: {
-      type: String,
-      enum: ["IT", "Support", "Ops", "Security", "HR", "Product", "Other"],
-      default: "Other",
+    knowledgeBase: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "KnowledgeBase",
+      required: [true, "Knowledge base is required"],
     },
     type: {
       type: String,
@@ -25,6 +25,13 @@ const documentSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    note: {
+      type: String,
+      trim: true,
+      maxlength: [80, "Note must be 80 characters or fewer"],
+    },
+
+    // null = the doc hasn't been written or reviewed yet
     lastReviewedAt: {
       type: Date,
       default: Date.now,

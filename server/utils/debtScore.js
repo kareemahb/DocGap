@@ -38,9 +38,11 @@ export const calculateDebtScore = (
   recentTicketCount = 0,
   now = new Date(),
 ) => {
-  const daysSinceReview = Math.floor(
-    (now - new Date(doc.lastReviewedAt)) / DAY_MS,
-  );
+  const neverReviewed = !doc.lastReviewedAt;
+  const daysSinceReview = neverReviewed
+    ? CAPS.ageDays
+    : Math.floor((now - new Date(doc.lastReviewedAt)) / DAY_MS);
+
   const monthsSinceReview = Math.round(daysSinceReview / 30);
   const negativeFeedback = doc.negativeFeedback ?? 0;
 
@@ -62,8 +64,10 @@ export const calculateDebtScore = (
   const reasons = [];
   if (recentTicketCount > 0)
     reasons.push(`${recentTicketCount} related support tickets (last 90 days)`);
-  if (monthsSinceReview >= 3)
+  if (neverReviewed) reasons.push("No linked doc yet");
+  else if (monthsSinceReview >= 3)
     reasons.push(`Last reviewed ${monthsSinceReview} months ago`);
+
   if (negativeFeedback > 0)
     reasons.push(`${negativeFeedback} negative feedback reports`);
   if (doc.missingInfo) reasons.push("Flagged as missing information");

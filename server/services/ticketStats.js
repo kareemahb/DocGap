@@ -41,3 +41,31 @@ export const countTicketsInWindow = async (from, to = new Date()) => {
   ]);
   return row?.total ?? 0;
 };
+
+export const dailyTicketCounts = async (days, now = new Date()) => {
+  const from = new Date(now.getTime() - days * DAY_MS);
+
+  const rows = await SupportIssue.aggregate([
+    { $unwind: "$occurrences" },
+    { $match: { occurrences: { $gte: from, $lt: now } } },
+    {
+      $group: {
+        _id: {
+          $floor: { $divide: [{ $subtract: [now, "$occurrences"] }, DAY_MS] },
+        },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const countsByDaysAgo = new Map(rows.map((row) => [row._id, row.count]));
+
+  return Array.from({ length: days }, (_, i) => {
+    const daysAgo = days - 1 - i;
+    return {
+      daysAgo,
+      date: new Date(now.getTime() - (daysAgo + 0.5) * DAY_MS),
+      count: countsByDaysAgo.get(daysAgo) ?? 0,
+    };
+  });
+};
