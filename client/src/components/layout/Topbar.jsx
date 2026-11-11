@@ -67,7 +67,7 @@ const Topbar = () => {
             <BellIcon />
           </button>
           <Link
-            to="/issues"
+            to="/issues?show=unlinked"
             className="hidden h-11 items-center rounded-xl border border-line bg-white px-4 font-semibold hover:bg-ghost sm:flex"
           >
             Link an issue

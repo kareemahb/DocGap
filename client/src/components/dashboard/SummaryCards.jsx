@@ -47,7 +47,7 @@ const SummaryCards = ({ overview }) => {
         dotClass="bg-gold"
         value={unlinkedIssues}
         detail={`${ticketsThisWeek.count} tickets this week`}
-        linkTo="/issues"
+        linkTo="/issues?show=unlinked"
         linkLabel="Link issues"
       />
       <SummaryCard

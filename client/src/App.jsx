@@ -5,6 +5,7 @@ import DocumentsPage from "./pages/DocumentsPage.jsx";
 import DocumentDetailPage from "./pages/DocumentDetailPage.jsx";
 import NewDocumentPage from "./pages/NewDocumentPage.jsx";
 import EditDocumentPage from "./pages/EditDocumentPage.jsx";
+import IssuesPage from "./pages/IssuesPage.jsx";
 import PlaceholderPage from "./pages/PlaceholderPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
@@ -16,15 +17,7 @@ const App = () => (
       <Route path="documents/new" element={<NewDocumentPage />} />
       <Route path="documents/:id" element={<DocumentDetailPage />} />
       <Route path="documents/:id/edit" element={<EditDocumentPage />} />
-      <Route
-        path="issues"
-        element={
-          <PlaceholderPage
-            title="Ticket issues"
-            description="Track recurring problems and link them to the docs behind them."
-          />
-        }
-      />
+      <Route path="issues" element={<IssuesPage />} />
       <Route
         path="impact"
         element={
