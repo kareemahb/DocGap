@@ -3,6 +3,8 @@ import AppLayout from "./layouts/AppLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import DocumentsPage from "./pages/DocumentsPage.jsx";
 import DocumentDetailPage from "./pages/DocumentDetailPage.jsx";
+import NewDocumentPage from "./pages/NewDocumentPage.jsx";
+import EditDocumentPage from "./pages/EditDocumentPage.jsx";
 import PlaceholderPage from "./pages/PlaceholderPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
@@ -11,16 +13,9 @@ const App = () => (
     <Route element={<AppLayout />}>
       <Route index element={<DashboardPage />} />
       <Route path="documents" element={<DocumentsPage />} />
-      <Route
-        path="documents/new"
-        element={
-          <PlaceholderPage
-            title="Add document"
-            description="Add a document to a knowledge base so DocGap can score it."
-          />
-        }
-      />
+      <Route path="documents/new" element={<NewDocumentPage />} />
       <Route path="documents/:id" element={<DocumentDetailPage />} />
+      <Route path="documents/:id/edit" element={<EditDocumentPage />} />
       <Route
         path="issues"
         element={

@@ -9,9 +9,19 @@ export const notFound = (req, res, next) => {
 export const errorHandler = (err, req, res, next) => {
   let status = err.status ?? 500;
   let message = err.message ?? "Server error";
+  let errors;
 
-  // Schema rule broken (missing title, bad enum value)
-  if (err.name === "ValidationError") status = 400;
+  // Schema rule broken (missing title, bad enum value): one message per field
+  if (err.name === "ValidationError") {
+    status = 400;
+    message = "Please fix the highlighted fields.";
+    errors = Object.fromEntries(
+      Object.entries(err.errors).map(([field, fieldError]) => [
+        field,
+        fieldError.message,
+      ]),
+    );
+  }
 
   // Malformed id, like /api/documents/abc
   if (err.name === "CastError") {
@@ -27,6 +37,7 @@ export const errorHandler = (err, req, res, next) => {
 
   res.status(status).json({
     message,
+    ...(errors && { errors }),
     ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
   });
 };

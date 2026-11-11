@@ -1,11 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000/api";
 
-// An error that carries the HTTP status, so the UI can react to 404 vs 500
+// An error that carries the HTTP status, plus per-field messages for forms
 export class ApiError extends Error {
-  constructor(message, status) {
+  constructor(message, status, fields = {}) {
     super(message);
     this.name = "ApiError";
     this.status = status;
+    this.fields = fields;
   }
 }
 
@@ -30,6 +31,7 @@ export const apiRequest = async (
     throw new ApiError(
       data?.message ?? `Request failed (${response.status})`,
       response.status,
+      data?.errors,
     );
   }
 

@@ -3,6 +3,8 @@ import DashboardHeader from "../components/dashboard/DashboardHeader.jsx";
 import SummaryCards from "../components/dashboard/SummaryCards.jsx";
 import FixFirstTable from "../components/dashboard/FixFirstTable.jsx";
 import ImpactCheckCard from "../components/dashboard/ImpactCheckCard.jsx";
+import KnowledgeBaseHealthCard from "../components/dashboard/KnowledgeBaseHealthCard.jsx";
+import TicketTrendChart from "../components/dashboard/TicketTrendChart.jsx";
 
 const StatusMessage = ({ children }) => (
   <div className="flex flex-col items-center gap-4 rounded-card border border-line bg-white p-8 text-center">
@@ -48,11 +50,11 @@ const DashboardPage = () => {
 
         <div className="flex flex-col gap-6">
           <ImpactCheckCard />
-          {/* Step 27: Knowledge base health goes here */}
+          <KnowledgeBaseHealthCard />
         </div>
       </div>
 
-      {/* Step 27: Tickets caused by doc gaps chart goes here */}
+      <TicketTrendChart />
     </div>
   );
 };
