@@ -29,3 +29,10 @@ export const formatPercent = (value) => {
   const sign = value > 0 ? "+" : value < 0 ? "−" : "";
   return `${sign}${Math.abs(value)}%`;
 };
+
+// add a short date format to report labels bar
+export const formatShortDate = (date) =>
+  new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });

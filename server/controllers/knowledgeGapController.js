@@ -2,6 +2,13 @@ import KnowledgeGap from "../models/KnowledgeGap.js";
 import { escapeRegex } from "../utils/escapeRegex.js";
 import { ensureDocumentExists } from "../utils/ensureDocumentExists.js";
 
+// Loads each gap's document title and owner, plus its knowledge base name and color
+const GAP_DOCUMENT_POPULATE = {
+  path: "document",
+  select: "title owner knowledgeBase",
+  populate: { path: "knowledgeBase", select: "name color" },
+};
+
 // GET /api/gaps?status=open&priority=critical&assignee=rivera&document=<id>
 export const getGaps = async (req, res) => {
   const { status, priority, assignee, document } = req.query;
@@ -14,7 +21,7 @@ export const getGaps = async (req, res) => {
   if (document) filter.document = document;
 
   const gaps = await KnowledgeGap.find(filter)
-    .populate("document", "title category owner")
+    .populate(GAP_DOCUMENT_POPULATE)
     .sort({ createdAt: -1 });
 
   res.json(gaps);
@@ -22,7 +29,9 @@ export const getGaps = async (req, res) => {
 
 // GET /api/gaps/:id
 export const getGap = async (req, res) => {
-  const gap = await KnowledgeGap.findById(req.params.id).populate("document");
+  const gap = await KnowledgeGap.findById(req.params.id).populate(
+    GAP_DOCUMENT_POPULATE,
+  );
   if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
   res.json(gap);
 };

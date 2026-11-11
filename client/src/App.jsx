@@ -6,6 +6,8 @@ import DocumentDetailPage from "./pages/DocumentDetailPage.jsx";
 import NewDocumentPage from "./pages/NewDocumentPage.jsx";
 import EditDocumentPage from "./pages/EditDocumentPage.jsx";
 import IssuesPage from "./pages/IssuesPage.jsx";
+import ImpactPage from "./pages/ImpactPage.jsx";
+import NewKnowledgeBasePage from "./pages/NewKnowledgeBasePage.jsx";
 import PlaceholderPage from "./pages/PlaceholderPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
@@ -18,15 +20,7 @@ const App = () => (
       <Route path="documents/:id" element={<DocumentDetailPage />} />
       <Route path="documents/:id/edit" element={<EditDocumentPage />} />
       <Route path="issues" element={<IssuesPage />} />
-      <Route
-        path="impact"
-        element={
-          <PlaceholderPage
-            title="Impact"
-            description="See whether each documentation fix reduced related tickets."
-          />
-        }
-      />
+      <Route path="impact" element={<ImpactPage />} />
       <Route
         path="reports"
         element={
@@ -36,15 +30,8 @@ const App = () => (
           />
         }
       />
-      <Route
-        path="knowledge-bases/new"
-        element={
-          <PlaceholderPage
-            title="New knowledge base"
-            description="Group related documents, like a Help Center or IT Runbooks."
-          />
-        }
-      />
+      <Route path="knowledge-bases/new" element={<NewKnowledgeBasePage />} />
+
       <Route path="*" element={<NotFoundPage />} />
     </Route>
   </Routes>

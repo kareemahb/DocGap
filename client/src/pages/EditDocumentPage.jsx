@@ -1,6 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { api } from "../lib/api.js";
 import { useApi } from "../hooks/useApi.js";
+import { useDataVersion } from "../context/dataVersion.js";
 import DocumentForm, {
   toFormValues,
 } from "../components/documents/DocumentForm.jsx";
@@ -8,6 +9,7 @@ import DocumentForm, {
 const EditDocumentPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { refresh } = useDataVersion();
   const { data: doc, loading, error } = useApi(`/documents/${id}`);
 
   if (loading && !doc)
@@ -30,6 +32,7 @@ const EditDocumentPage = () => {
 
   const saveDocument = async (payload) => {
     await api.put(`/documents/${id}`, payload);
+    refresh();
     navigate(`/documents/${id}`);
   };
 

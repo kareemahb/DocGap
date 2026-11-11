@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router";
 import { useApi } from "../hooks/useApi.js";
+import { useDataVersion } from "../context/dataVersion.js";
 import IssueRow from "../components/issues/IssueRow.jsx";
 
 const filters = [
@@ -29,6 +30,7 @@ const IssuesPage = () => {
     ? searchParams.get("show")
     : "all";
   const activeFilter = filters.find((f) => f.value === show);
+  const { refresh } = useDataVersion();
 
   const issues = useApi(`/issues${activeFilter.query}`);
   const documents = useApi("/documents?sort=title");
@@ -104,7 +106,7 @@ const IssuesPage = () => {
             key={issue._id}
             issue={issue}
             documents={documents.data}
-            onChanged={issues.reload}
+            onChanged={refresh}
           />
         ))}
       </ul>
