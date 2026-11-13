@@ -320,11 +320,9 @@ export const getFixImpact = async (req, res) => {
   if (!gap) return res.status(404).json({ message: "Knowledge gap not found" });
 
   if (!gap.resolvedAt) {
-    return res
-      .status(400)
-      .json({
-        message: "This gap isn't resolved yet, so there's no fix to measure",
-      });
+    return res.status(400).json({
+      message: "This gap isn't resolved yet, so there's no fix to measure",
+    });
   }
   if (!gap.document) {
     return res
@@ -365,4 +363,37 @@ export const getFixes = async (req, res) => {
   }
 
   res.json(results);
+};
+
+// ─── Root causes: what kind of problem the tickets point to ───────
+
+// GET /api/analytics/root-causes?days=30
+export const getRootCauseBreakdown = async (req, res) => {
+  const days = parseDays(req.query.days, 30);
+  const now = new Date();
+
+  const rootCauses = await SupportIssue.aggregate([
+    { $unwind: "$occurrences" },
+    { $match: { occurrences: { $gte: daysBefore(now, days), $lt: now } } },
+    {
+      $group: {
+        _id: "$rootCause",
+        tickets: { $sum: 1 },
+        issueIds: { $addToSet: "$_id" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        rootCause: "$_id",
+        tickets: 1,
+        issues: { $size: "$issueIds" },
+      },
+    },
+    { $sort: { tickets: -1 } },
+  ]);
+
+  const totalTickets = rootCauses.reduce((sum, row) => sum + row.tickets, 0);
+
+  res.json({ days, totalTickets, rootCauses });
 };

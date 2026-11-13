@@ -8,7 +8,7 @@ import EditDocumentPage from "./pages/EditDocumentPage.jsx";
 import IssuesPage from "./pages/IssuesPage.jsx";
 import ImpactPage from "./pages/ImpactPage.jsx";
 import NewKnowledgeBasePage from "./pages/NewKnowledgeBasePage.jsx";
-import PlaceholderPage from "./pages/PlaceholderPage.jsx";
+import ReportsPage from "./pages/ReportsPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 const App = () => (
@@ -21,17 +21,8 @@ const App = () => (
       <Route path="documents/:id/edit" element={<EditDocumentPage />} />
       <Route path="issues" element={<IssuesPage />} />
       <Route path="impact" element={<ImpactPage />} />
-      <Route
-        path="reports"
-        element={
-          <PlaceholderPage
-            title="Reports"
-            description="Ticket trends and knowledge base health over time."
-          />
-        }
-      />
+      <Route path="reports" element={<ReportsPage />} />
       <Route path="knowledge-bases/new" element={<NewKnowledgeBasePage />} />
-
       <Route path="*" element={<NotFoundPage />} />
     </Route>
   </Routes>

@@ -12,23 +12,25 @@ const statusBadges = {
   empty: { label: "No docs yet", className: "bg-ghost ring-1 ring-line" },
 };
 
-const VISIBLE_BY_DEFAULT = 3;
-
-const KnowledgeBaseHealthCard = () => {
+// `visibleByDefault`: how many to show before "View all" (the dashboard shows 3, Reports shows them all)
+const KnowledgeBaseHealthCard = ({
+  visibleByDefault = 3,
+  title = "Knowledge base health",
+}) => {
   const { data, loading, error } = useApi("/analytics/knowledge-bases");
   const [showAll, setShowAll] = useState(false);
 
   const knowledgeBases = data?.knowledgeBases ?? [];
   const visible = showAll
     ? knowledgeBases
-    : knowledgeBases.slice(0, VISIBLE_BY_DEFAULT);
-  const hasMore = knowledgeBases.length > VISIBLE_BY_DEFAULT;
+    : knowledgeBases.slice(0, visibleByDefault);
+  const hasMore = knowledgeBases.length > visibleByDefault;
 
   return (
     <section className="rounded-card border border-line bg-white p-5">
       <div className="mb-4 flex items-start justify-between gap-3">
         <h2 className="text-xl font-bold leading-tight tracking-tight">
-          Knowledge base health
+          {title}
         </h2>
         {hasMore && (
           <button
