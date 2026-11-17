@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router";
 import AppLayout from "./layouts/AppLayout.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import DocumentsPage from "./pages/DocumentsPage.jsx";
 import DocumentDetailPage from "./pages/DocumentDetailPage.jsx";
@@ -13,8 +14,12 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 
 const App = () => (
   <Routes>
+    {/* Public landing page: no sidebar */}
+    <Route index element={<LandingPage />} />
+
+    {/* The app: every page inside the sidebar + top bar layout */}
     <Route element={<AppLayout />}>
-      <Route index element={<DashboardPage />} />
+      <Route path="dashboard" element={<DashboardPage />} />
       <Route path="documents" element={<DocumentsPage />} />
       <Route path="documents/new" element={<NewDocumentPage />} />
       <Route path="documents/:id" element={<DocumentDetailPage />} />

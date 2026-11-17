@@ -6,10 +6,10 @@ import {
   ReportIcon,
 } from "../icons.jsx";
 
-// Main navigation, shared by the sidebar and the menu.
+// Main navigation, shared by the sidebar and the phone-size menu.
 // `countKey` names the number shown on the right, filled in by the sidebar.
 export const navItems = [
-  { to: "/", label: "Home", icon: HomeIcon, end: true },
+  { to: "/dashboard", label: "Home", icon: HomeIcon },
   {
     to: "/documents",
     label: "Documents",
