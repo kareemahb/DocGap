@@ -51,7 +51,7 @@ const Sidebar = () => {
         <ChevronUpDownIcon size={16} className="text-muted" />
       </div>
 
-      {/* Main navigation */}
+      {/* This is the main navigation */}
       <nav aria-label="Main" className="flex flex-col gap-1">
         {navItems.map(({ to, label, icon: ItemIcon, end, countKey }) => (
           <NavLink key={to} to={to} end={end} className={navLinkClasses}>
