@@ -4,7 +4,7 @@
 
 DocGap is an operational knowledge health platform for support and IT teams. It connects recurring support issues to the documentation behind them, scores each document's "documentation debt," and shows whether a fix actually reduced tickets.
 
-🔗 **Live demo:** _add link_
+🔗 **Live demo:** [docgap.onrender.com](https://docgap.onrender.com)
 🎥 **Demo Day walkthrough:** _add link_
 
 ![DocGap screenshot]
